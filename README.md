@@ -12,14 +12,15 @@ image dataset을 정하여 CNN 모델을 적용하여 학습시켜 보는 것이
 더불어 이미지 데이터를 `numpy array`가 아닌 `Tensor`형의 데이터로 다루는 것도 새로웠다.
 
 
-## Crop_with_Annotation_and_Save_Data
-데이터 전처리 함수에 tf.map함수를 통하여 문자열이 포함된 텐서형의 자료를 넘겨주었을 때, 전처리 함수에서 문자열 연산을 취하지 못하는 문제가 발생하였다. 기존에는 데이터로부터 tensorflow dataset을 만들 때 image cropping을 해주었으나, 이것이 불가능하게 되어 crop된 이미지 데이터를 모두 생성하고, Google Drive에 저장하여, 이를 불러와서 사용하는 형태로 바꾸었다.
-
 ## DogBreed_simple_cnn_tf2
 20%
+
+### Crop_with_Annotation_and_Save_Data
+데이터 전처리 함수에 tf.map함수를 통하여 문자열이 포함된 텐서형의 자료를 넘겨주었을 때, 전처리 함수에서 문자열 연산을 취하지 못하는 문제가 발생하였다. 기존에는 데이터로부터 tensorflow dataset을 만들 때 image cropping을 해주었으나, 이것이 불가능하게 되어 crop된 이미지 데이터를 모두 생성하고, Google Drive에 저장하여, 이를 불러와서 사용하는 형태로 바꾸었다.
+
 ## DogBreed_simple_cnn_double_resolution
 27%
 ## DogBreed_ResNet
 model.fit()에서 메모리 용량 초과 문제 발생. model.fit_generator()로 해결가능. generator 객체를 생성할 때, flow_from_dataframe 메소드의 경우 pandas 데이터프레임이어야 하므로 flow_from_directory를 사용하기로 하였다. flow_from_directory를 사용하기 위해서는 train, validation, test 디렉토리가 따로 존재해야한다.
-## Shuffle_and_Split_Data
+### Shuffle_and_Split_Data
 crop된 이미지들로 부터 train, validation, test 데이터로 나누어 Google Drive에 저장하였다.
