@@ -7,5 +7,16 @@ image dataset을 정하여 CNN 모델을 적용하여 학습시켜 보는 것이
 ## CIFAR10-fastai
 ```ciafr 10```, ```cifar 100```의 모델에 따른 정확도에 대하여 조사하면서 `ResNet`, `Inception`, `EfficientNet`, `MobileNet`등의 향상된 CNN 모델을 새로 알게 되었고, `ResNet`과 `Inception`은 `keras`나 `fastai`의 내장 모델로 구현되어 있다는 사실을 알게되었다. 매우 간결한 코드로 모델을 학습시켜볼 수 있는 `fastai`라는 모듈에 흥미가 생겨, `fastai`에 구현되어있는 모델들을 활용하여 `cifar 10` dataset을 높은 accuracy로 학습시켜 보고자 하였다.
 
-## Image_Data_loading_and_preprocessing.ipynb
-```tensorflow 2.0```의 이미지 데이터 로딩과 처리에 대한 튜토리얼을 따라하며 새로워진 기본 문법과 ```tf.keras``` 라이브러리에 대하여 알게되었다. 
+## Image_Data_loading_and_preprocessing
+```tensorflow 2.0```의 이미지 데이터 로딩과 처리에 대한 튜토리얼을 따라하며 새로워진 기본 문법과 ```tf.keras``` 라이브러리에 대하여 알게되었다. `fastai`에서와 같이 모델 객체를 구현하고, `.fit()`이라는 method를 통해서 학습을 시키고, `.evaluate()` method를 통해서 test, 평가한다. 
+더불어 이미지 데이터를 `numpy array`가 아닌 `Tensor`형의 데이터로 다루는 것도 새로웠다.
+
+
+## Crop_with_Annotation_and_Save_Data
+
+## DogBreed_simple_cnn_tf2
+
+## DogBreed_simple_cnn_double_resolution
+
+
+## Shuffle_and_Split_Data.ipynb
