@@ -22,5 +22,6 @@ image dataset을 정하여 CNN 모델을 적용하여 학습시켜 보는 것이
 27%
 ## DogBreed_ResNet
 model.fit()에서 메모리 용량 초과 문제 발생. model.fit_generator()로 해결가능. generator 객체를 생성할 때, flow_from_dataframe 메소드의 경우 pandas 데이터프레임이어야 하므로 flow_from_directory를 사용하기로 하였다. flow_from_directory를 사용하기 위해서는 train, validation, test 디렉토리가 따로 존재해야한다.
+https://stackoverflow.com/questions/54311198/why-model-fit-function-in-keras-significantly-increase-ram-memory
 ### Shuffle_and_Split_Data
 crop된 이미지들로 부터 train, validation, test 데이터로 나누어 Google Drive에 저장하였다.
