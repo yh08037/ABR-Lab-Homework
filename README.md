@@ -27,3 +27,5 @@ model.fit()에서 메모리 용량 초과 문제 발생. model.fit_generator()�
 https://stackoverflow.com/questions/54311198/why-model-fit-function-in-keras-significantly-increase-ram-memory
 ### Shuffle_and_Split_Data
 crop된 이미지들로 부터 train, validation, test 데이터로 나누어 Google Drive에 저장하였다.
+
+gg
