@@ -61,9 +61,96 @@ CIFAR 10, CIFAR 100의 accuracy에 대해 조사하면서 ResNet, Inception, Mob
 [(참고)](https://stackoverflow.com/questions/54311198/why-model-fit-function-in-keras-significantly-increase-ram-memory)
 
 
-## DogBreed_ResNet
-generator 객체를 생성할 때, flow_from_dataframe 메소드의 경우 pandas 데이터프레임이어야 하므로 flow_from_directory를 사용하기로 하였다. flow_from_directory를 사용하기 위해서는 train, validation, test 디렉토리가 따로 존재해야한다.
 ### Shuffle_and_Split_Data
-crop된 이미지들로 부터 train, validation, test 데이터로 나누어 Google Drive에 저장하였다.
+generator 객체를 생성할 때, flow_from_dataframe 메소드의 경우 pandas 데이터프레임이어야 하므로 flow_from_directory를 사용하기로 하였다. flow_from_directory를 사용하기 위해서는 train, validation, test 디렉토리가 따로 존재해야한다. crop된 이미지들로 부터 train, validation, test 데이터로 나누어 Google Drive에 저장하였다.
 
-gg
+## Generator
+``` python
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+
+train_datagen = ImageDataGenerator(
+    rescale=1./255,
+    featurewise_center=True,
+    featurewise_std_normalization=True,
+    rotation_range=20,
+    width_shift_range=0.2,
+    height_shift_range=0.2,
+    horizontal_flip=True)
+valid_datagen = ImageDataGenerator(rescale=1./255)
+test_datagen = ImageDataGenerator(rescale=1./255)
+
+BATCH_SIZE = 32
+
+train_datagen = train_datagen.flow_from_directory(
+    directory='/content/train',
+    target_size=(224, 224),
+    batch_size=BATCH_SIZE)
+
+valid_datagen = valid_datagen.flow_from_directory(
+    directory='/content/valid',
+    target_size=(224, 224),
+    batch_size=BATCH_SIZE)
+
+test_datagen = test_datagen.flow_from_directory(
+    directory='/content/test',
+    target_size=(224, 224),
+    batch_size=BATCH_SIZE)
+```
+데이터셋을 나눌 때 각 class 안에서 일정한 비율로 나누어, train, validation, test 셋에 모두 120개의 class가 비율을 유지하면서 임의로 나누어지게 하였다. Train data의 generator의 옵션을 통하여 무작위의 rotation과 shift, flip이 되게 하여 학습의 능률을 올려보고자 하였다.
+
+## Dog Breed – MobileNetV2
+``` python
+from tensorflow import keras
+from tensorflow.keras import layers
+
+model = keras.applications.MobileNetV2(
+    input_shape=(224, 224, 3),
+    include_top=False,
+    pooling='avg',
+    weights='imagenet')
+model.trainable = False
+output = keras.layers.Dense(120, 'softmax')(model.layers[-1].output)
+logits = keras.layers.Dropout(0.5)(output)
+model = keras.models.Model(model.inputs, logits)
+model.compile('adam', 'categorical_crossentropy', ['accuracy'])
+
+model.summary()
+```
+학습의 효율을 위해 keras에 구현되어 있는 MobileNet을 활용하였다. 또한 imagenet의 pretrained weight를 활용하고, 학습대상에서 제외하였다. Output layer에 0.5의 비율로 dropout을 추가하여 오버피팅을 완화하고자 하였다.
+
+``` python
+_, test_acc = model.evaluate_generator(generator=test_datagen)
+print('test accuracy :', test_acc)
+
+# test accuracy : 0.67429763
+```
+10번의 epoch 학습을 통해 약 67%의 Test accuracy를 얻을 수 있었다. 이는 단순한 CNN 구조에서의 정확도 20%와 비교하였을 때 엄청난 발전이다. 이는 ImageNet pretrained data를 활용하였기 때문으로 판단된다.
+
+## Dog Breed – InceptionV3
+``` python
+from tensorflow import keras
+from tensorflow.keras import layers
+
+model = keras.applications.InceptionV3(
+    input_shape=(224, 224, 3),
+    include_top=False,
+    pooling='avg',
+    weights='imagenet')
+model.trainable = False
+output = keras.layers.Dense(120, 'softmax')(model.layers[-1].output)
+logits = keras.layers.Dropout(0.5)(output)
+model = keras.models.Model(model.inputs, logits)
+model.compile('adam', 'categorical_crossentropy', ['accuracy'])
+
+model.summary()
+```
+MobileNet에 적용한 것과 같은 방식으로 Imagenet pretrained model 활용하여 Inception V3 모델을 적용하였다.
+
+``` python
+_, test_acc = model.evaluate_generator(generator=test_datagen)
+print('test accuracy :', test_acc)
+
+# test accuracy : 0.81789804
+```
+
+10번의 epoch 학습을 통해 약 82%의 Test accuracy를 얻을 수 있었다.
