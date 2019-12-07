@@ -17,15 +17,17 @@ image dataset을 정하여 CNN 모델을 적용하여 학습시켜 보는 것이
 [Image_Data_loading_and_preprocessing](https://www.tensorflow.org/beta/tutorials/load_data/images)은 `tensorflow 2.0`의 이미지 데이터 로드 및 전처리에 대한 튜토리얼이다. 이 문서를 읽어보면서, ```tensorflow 2.0```의 이미지 데이터 로딩과 처리에 대한 튜토리얼을 따라하며 새로워진 기본 문법과 ```tf.keras``` 라이브러리에 대하여 알게되었다. `fastai`에서와 같이 모델 객체를 구현하고, `.fit()`이라는 method를 통해서 학습을 시키고, 학습데이터를 `feed_dict` 대신 함수의 인자로 데이터 전달하며, `.evaluate()` method를 통해서 test, 평가한다. 
 더불어 이미지 데이터를 `numpy array`가 아닌 `Tensor`형의 데이터로 다루는 것도 새로웠다.
 
-## Crop_with_Annotation_and_Save_Data
+## Crop with Annotation
 ![crop](images/(3)dogbreed.png)
 실제로 적용하는데에 학습 모델을 만드는 것은 tf.keras 모듈을 통해서 쉽고 직관적으로 만들 수 있었다. 오히려 더 다루기 어려웠던 것은 내가 사용하고자 하는 데이터를 학습모델에 적용할 수 있도록 전처리하는 것이었다. 특히 Dog Data는 Imagenet 데이터의 부분집합이어서, 이미지 데이터에서 개의 부분만을 뽑아내기 위해서 Annotation xml 파일을 읽어들여 원래의 이미지에서 cropping을 하는 전처리가 필요하다. 따라서 tensorflow.data를 이용하여 이미지 파일로 부터 numpy array가 아닌, 각 이미지의 경로를 저장한 문자열 자료의 텐서의 dataset 객체를 만들고, tf.map 함수에 전처리 함수와 dataset 객체를 넘겨 cropping, resizing을 한 dataset을 만들려고 하였다. 
 
 데이터 전처리 함수에 tf.map함수를 통하여 문자열이 포함된 텐서형의 자료를 넘겨주었을 때, 전처리 함수에서 문자열 연산을 취하지 못하는 문제가 발생하였다. 기존에는 데이터로부터 tensorflow dataset을 만들 때 image cropping을 해주었으나, 이것이 불가능하게 되어 crop된 이미지 데이터를 모두 생성하고, Google Drive에 저장하여, 이를 불러와서 사용하는 형태로 바꾸었다.
 
 
-## DogBreed_simple_cnn_tf2 20%
-Image Data loading and preprocessing 의 코드를 활용하여 Stanford Dog Breed Data 에 맞도록 적용하여 간단한 cnn모델을 적용해 보았다. 
+## Dog Breed - simple cnn
+앞에서 소개한 튜토리얼(Image Data loading and preprocessing)의 코드를 활용하여 Stanford Dog Breed Data 에 맞도록 적용하여 간단한 cnn모델을 적용해 보았다. CIFAR 데이터셋의 이미지가 32 X 32인 것에 착안하여, 먼저 이미지의 크기를 줄여서 학습을 시켜보았다. 64 x 64 로 resize한 이미지를 입력으로 받는 간단한 CNN 모델 구성을 구성하여 학습시키고 성능을 평가하여 보았다.
+
+그 결과 10번의 epoch만에 오버피팅이 나타났으며, 최종 정확도 약 20%가 도출되었다.
 
 
 ## DogBreed_simple_cnn_double_resolution
