@@ -39,7 +39,8 @@ image dataset을 정하여 CNN 모델을 적용하여 학습시켜 보는 것이
 
 ## Dog Breed - Better Models
 CIFAR 10, CIFAR 100의 accuracy에 대해 조사하면서 ResNet, Inception, MobileNet 등의 모델들과 EfficientNet, MixNet과 같은 최신 모델들에 대해 알게되었다. 이 모델들에 맞도록 이미지를 (224, 224)의 크기로 resize하여, 여러 모델을 적용해 학습시켜보고자 하였다. 하지만 이전의 학습 모델 코드에서 입력 데이터 사이즈와 모델 구조만 바꾸고 학습을 진행하려하였을 때 문제가 발생하였다. 
-
+![ram](images/ram.PNG)
+![fit](images/fit.PNG)
 이미지의 사이즈가 224 x 224로 기존의 64 x 64 데이터보다 크기가 훨씬 커져 model.fit()을 실행시켰을 때 학습이 시작되기 전 데이터를 로딩하다가 램 용량을 초과한다. 이는 `keras`의 `model.fit()`의 구현 특징 상의 문제이다. `model.fit()`을 실행하면 학습이 시작되기 전, 학습에 필요한 모든 데이터를 램에 적재하고 시작한다. 이로 인해 램 용량이 부족한 사태가 발생한다. 
 이를 해결하기 위해서는 `model.fit_generator()`를 사용해야한다. `model.fit_generator()`는 학습 데이터를 배치단위로 파이프라이닝하여 한번에 모든 데이터를 메모리에 적재하지 않고, 배치단위로 메모리에 적재한다.
 
